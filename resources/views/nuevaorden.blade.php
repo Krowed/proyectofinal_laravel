@@ -54,7 +54,8 @@
                         <div class="form-group col-md-3">
                             <label for="">Producto</label>
                             <div class="input-group input-group-sm mb-3">
-                                <input type="text" class="form-control form-control-sm" placeholder="Buscar producto...">
+                                <input type="hidden" name="idproducto" class="form-control form-control-sm">
+                                <input id="producto" type="text" class="form-control form-control-sm" name="producto" placeholder="Buscar producto...">
                                 <div class="input-group-prepend">
                                   <span class="input-group-text"><i class="fas fa-search"></i></span>
                                 </div>
@@ -63,7 +64,7 @@
 
                         <div class="form-group col-md-3">
                             <label for="">Cantidad</label>
-                            <input type="text" class="form-control form-control-sm" name="cantidad">
+                            <input id="cantidad" type="number" class="form-control form-control-sm" name="cantidad">
                         </div>
 
                         <div class="form-group col-md-3">
@@ -73,7 +74,7 @@
 
                         <div class="form-group col-md-3">
                             <label for="">&nbsp;</label>
-                            <button class="btn btn-primary btn-block btn-sm">Agregar</button>
+                            <button class="btn btn-primary btn-block btn-sm btn_agregardetalle">Agregar</button>
                         </div>
                     </div>
                     <!-- /.card-body -->
@@ -98,20 +99,11 @@
                         <th>Cantidad</th>
                         <th>Precio unit.</th>
                         <th>Subtotal</th>
-                        <th></th>
+                        <th width="8%"></th>
                     </tr>
                 </thead>
 
-                <tbody class="text-center">
-                    <tr>
-                        <td>01</td>
-                        <td>Producto01</td>
-                        <td>2</td>
-                        <td>133</td>
-                        <td>200</td>
-                        <td><button class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button></td>
-                    </tr>
-                </tbody>
+                <tbody id="tbody_detalle" class="text-center"></tbody>
             </table>
         </div>
       </div>
@@ -122,7 +114,7 @@
         </div> 
 
         <div class="form-group col-md-2">
-            <button class="btn btn-sm btn-danger btn-block"><i class="fas fa-times-circle"></i> Cancelar</button>
+            <a href="{{ route('ordenes') }}" class="btn btn-sm btn-danger btn-block"><i class="fas fa-times-circle"></i> Cancelar</a>
         </div>
       </div>
     </form>
@@ -131,5 +123,79 @@
     <script>
         $('input[name="fecha_orden"]').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
         $('input[name="fecha_entrega"]').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+
+        $('input[name="producto"]').autocomplete({
+            source : function(request , response)
+            {
+                $.ajax({
+                    url         : "{{ route('buscarproducto') }}",
+                    method      : 'POST',
+                    data        : {
+                        '_token' : "{{ csrf_token() }}",
+                        producto : request.term
+
+                    },
+                    success     : function(data){
+                        response(data);
+                    },
+                    dataType    : 'json'
+                });
+            },
+
+            minLength : 1,
+            select    : function(event , ui){
+                $('input[name="producto"]').val(ui.item.label);
+                $('input[name="cantidad"]').val(1);
+                $('input[name="precio_unitario"]').val(parseFloat(ui.item.precio).toFixed(2));
+                $('input[name="idproducto"]').val(ui.item.idproducto);
+            }
+        });
+
+
+        $('input[name="cantidad"]').on('change' , function(){
+            let cantidad        = parseInt($(this).val());
+
+                if(cantidad <= 0 )
+                {
+                    cantidad = 1;
+                    $('input[name="cantidad"]').val(cantidad);
+                }
+        });
+
+
+        $('body').on('click' , '.btn_agregardetalle' , function(e) {
+            e.preventDefault();
+              let   idproducto      = $('input[name="idproducto"]').val(),
+                    producto        = $('input[name="producto"]').val(),
+                    cantidad        = parseInt($('input[name="cantidad"]').val()),
+                    precio_unitario = parseFloat($('input[name="precio_unitario"]').val()),
+                    subtotal        = (cantidad * precio_unitario),
+                    tbody           = $('#tbody_detalle').html(),
+                    fila            = ''; 
+
+                
+                $.ajax({
+                    url         : "{{ url('agregardetalle') }}",
+                    method      : 'POST',
+                    data        : {
+                        '_token'        : "{{ csrf_token() }}",
+                        idproducto      : idproducto,
+                        producto        : producto,
+                        cantidad        : cantidad,
+                        precio_unitario : precio_unitario,
+                        subtotal        : subtotal
+                    },
+                    success     : function(r){
+                        if(!r.estado)
+                        {
+                            alert(r.mensaje);
+                            return;
+                        }   
+
+
+                    },
+                    dataType    : 'json'
+                });
+        }); 
     </script>
 @endsection

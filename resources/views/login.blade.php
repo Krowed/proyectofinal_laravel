@@ -9,11 +9,12 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
   <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+  <script src="{{ asset('dist/css/sweetalert.js') }}"></script>
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -25,9 +26,10 @@
     <div class="card-body">
       <p class="login-box-msg">Iniciar sesión</p>
 
-      <form action="index3.html" method="post">
+      <form action="{{ route('iniciarsesion') }}" method="POST" autocomplete="off">
+        @csrf
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="E-mail">
+          <input type="email" class="form-control" placeholder="E-mail" value="admin@comunicacionglobal.com" name="email">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -35,7 +37,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Contraseña">
+          <input type="password" class="form-control" placeholder="Contraseña" name="clave">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -45,10 +47,7 @@
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Recordar
-              </label>
+              
             </div>
           </div>
           <!-- /.col -->
@@ -66,10 +65,20 @@
 <!-- /.login-box -->
 
 <!-- jQuery -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.min.js"></script>
+<script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
+<script>
+    let mensaje = "{{ session('mensaje') }}";
+    if(mensaje)
+    {
+      Swal.fire({
+        icon: 'error',
+        text: mensaje
+      });
+    }
+</script>
 </body>
 </html>

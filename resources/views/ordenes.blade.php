@@ -12,7 +12,7 @@
             <div class="card">
                 <!-- /.card-header -->
                 <div class="card-body">
-                  <a href="" class="btn btn-primary mb-3"><i class="fas fa-file-alt"></i> Nuevo</a>
+                  <a href="{{ route('nuevaorden') }}" class="btn btn-primary mb-3"><i class="fas fa-file-alt"></i> Nuevo</a>
                   <table id="example1" class="table table-bordered table-striped table-sm">
                     <thead class="text-center">
                     <tr>

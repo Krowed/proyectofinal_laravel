@@ -89,33 +89,15 @@
                 </thead>
 
                 <tbody class="text-center">
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 4.0
-                  </td>
-                  <td>Win 95+</td>
-                  <td> 4</td>
-                  <td>X</td>
-                </tr>
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 5.0
-                  </td>
-                  <td>Win 95+</td>
-                  <td>5</td>
-                  <td>C</td>
-                </tr>
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 5.5
-                  </td>
-                  <td>Win 95+</td>
-                  <td>5.5</td>
-                  <td>A</td>
-                </tr>
+                @foreach($productos_bajostock as $producto)
+                    <tr>
+                        <td>{{ $producto->ID_Prod }}</td>
+                        <td>{{ $producto->Nombre_Prod }}</td>
+                        <td>{{ $producto->tipo_producto }}</td>
+                        <td>{{ $producto->PrecioVent_Prod }}</td>
+                        <td>{{ $producto->StockActual_Prod }}</td>
+                    </tr>
+                @endforeach
                 </tfoot>
               </table>
             </div>
