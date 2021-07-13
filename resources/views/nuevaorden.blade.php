@@ -173,26 +173,7 @@
                     subtotal        = (cantidad * precio_unitario),
                     fila            = ''; 
 
-                    if(tbody == '')
-                    {
-                        fila        += `<tr><td>${idproducto}</td><td>${producto}</td><td>${cantidad}</td><td>${precio_unitario}</td><td>${subtotal}</td><td><a href="" class="text-danger"><i class="fas fa-trash-alt"></i></a</td></tr>`;
-                    }
-
-                    else {
-                        $.each($('#tbody_detalle tr') , function(index, tr) {
-                            let id_td           = $(this).find('td').eq(0).html(),
-                                producto_table  = $(this).find('td').eq(1).html(),
-                                cantidad        = $(this).find('td').eq(2).html(),
-                                precio_u_table  = $(this).find('td').eq(3).html(),
-                                subtotal_table  = $(this).find('td').eq(4).html();
-                                
-                                return;
-                        });
-
-
-                    }
-
-                    fila         += `<tr><td>${idproducto}</td><td>${producto}</td><td>${cantidad}</td><td>${precio_unitario}</td><td>${subtotal}</td><td><a href="" class="text-danger"><i class="fas fa-trash-alt"></i></a</td></tr>`;
+                    fila        += `<tr><td>${idproducto}</td><td>${producto}</td><td>${cantidad}</td><td>${precio_unitario}</td><td>${subtotal}</td><td><a href="" class="text-danger"><i class="fas fa-trash-alt"></i></a</td></tr>`;
 
                     $('#tbody_detalle').append(fila);                   
         }); 
