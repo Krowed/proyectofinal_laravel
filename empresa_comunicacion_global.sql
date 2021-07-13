@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-07-2021 a las 17:25:09
+-- Tiempo de generación: 08-07-2021 a las 20:27:30
 -- Versión del servidor: 10.4.19-MariaDB
 -- Versión de PHP: 7.3.28
 
@@ -147,6 +147,22 @@ INSERT INTO `empleado` (`ID_Empl`, `Nombre_Empl`, `ApellidoPat_Empl`, `ApellidoM
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `failed_jobs`
+--
+
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `guia_de_remision`
 --
 
@@ -184,6 +200,27 @@ INSERT INTO `ingreso` (`ID_Ingres`, `Serie`, `Fecha`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `migrations`
+--
+
+CREATE TABLE `migrations` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '2014_10_12_000000_create_users_table', 1),
+(2, '2014_10_12_100000_create_password_resets_table', 1),
+(3, '2019_08_19_000000_create_failed_jobs_table', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `orden_compra`
 --
 
@@ -209,30 +246,50 @@ INSERT INTO `orden_compra` (`ID_Ordc`, `FechaOrden_Ordc`, `FechaEntrega_Ordc`, `
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `password_resets`
+--
+
+CREATE TABLE `password_resets` (
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `producto`
 --
 
 CREATE TABLE `producto` (
   `ID_Prod` int(11) NOT NULL,
   `Nombre_Prod` varchar(40) NOT NULL,
+  `Codigo` varchar(4) NOT NULL,
   `PrecioVent_Prod` decimal(12,2) NOT NULL,
   `PrecioComp_Prod` decimal(12,2) NOT NULL,
   `StockActual_Prod` int(11) NOT NULL,
   `StockInicial_Prod` int(11) NOT NULL,
   `ID_Prov` int(11) NOT NULL,
-  `ID_TProd` int(11) NOT NULL
+  `ID_TProd` int(11) NOT NULL,
+  `estado` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `producto`
 --
 
-INSERT INTO `producto` (`ID_Prod`, `Nombre_Prod`, `PrecioVent_Prod`, `PrecioComp_Prod`, `StockActual_Prod`, `StockInicial_Prod`, `ID_Prov`, `ID_TProd`) VALUES
-(1, 'V8 OTROS', '5.00', '5.00', 77, 155, 1, 22),
-(2, 'LYG/MOVISCON', '3.00', '4.00', 59, 104, 3, 2),
-(3, 'IPHONE GENERICO', '400.00', '200.00', -2, 1, 2, 3),
-(4, 'TABLET', '70.00', '60.00', 15, 8, 3, 10),
-(5, 'CELULAR', '980.00', '900.00', 123, 234, 1, 17);
+INSERT INTO `producto` (`ID_Prod`, `Nombre_Prod`, `Codigo`, `PrecioVent_Prod`, `PrecioComp_Prod`, `StockActual_Prod`, `StockInicial_Prod`, `ID_Prov`, `ID_TProd`, `estado`, `created_at`, `updated_at`) VALUES
+(1, 'V8 OTROS', '22', '5.00', '5.00', 155, 80, 1, 22, 1, NULL, '2021-07-05 18:31:30'),
+(2, 'LYG/MOVISCON', '2', '3.00', '4.00', 59, 104, 3, 2, 1, NULL, NULL),
+(3, 'IPHONE GENERICO', '3', '400.00', '200.00', 2, 1, 2, 3, 1, NULL, '2021-07-05 18:26:44'),
+(4, 'TABLET', '4', '70.00', '60.00', 15, 8, 3, 10, 1, NULL, NULL),
+(5, 'CELULAR', '17', '980.00', '900.00', 234, 123, 1, 17, 1, NULL, '2021-07-05 18:02:13'),
+(6, 'Prueba', '6', '15.00', '13.00', 50, 80, 3, 6, 1, NULL, NULL),
+(7, 'productoprueba', '7', '20.00', '15.00', 50, 70, 3, 14, 1, NULL, NULL),
+(8, 'Producto03', '8', '15.00', '10.00', 50, 70, 1, 2, 1, NULL, NULL),
+(9, 'Prueba09', '7', '20.00', '15.00', 50, 80, 1, 7, 1, NULL, '2021-07-05 18:32:58');
 
 -- --------------------------------------------------------
 
@@ -247,19 +304,21 @@ CREATE TABLE `proveedor` (
   `RazonSocial_Prov` varchar(50) NOT NULL,
   `Email_Prov` varchar(50) DEFAULT NULL,
   `Nombre_Prov` varchar(50) DEFAULT NULL,
-  `ID_TProv` int(11) NOT NULL
+  `ID_TProv` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `proveedor`
 --
 
-INSERT INTO `proveedor` (`ID_Prov`, `Direccion_Prov`, `Telefono_Prov`, `RazonSocial_Prov`, `Email_Prov`, `Nombre_Prov`, `ID_TProv`) VALUES
-(1, 'Cercado de Lima ', '(01)3886906', 'Oscaona Ruiz', 'oscaonaruiz@gmail.com', 'Brigida Amador', 1),
-(2, 'Santiago de Surco', '948326040', 'Smartphones Peru SAC ', 'smarthperu@gmail.com', 'Carlos Enrique Cabrera', 2),
-(3, 'Av.La Molina', '981599076', 'Celulares Peru', 'celuperuoficial@gmail.com', 'Equipos para oficina y escolar', 3),
-(4, 'Lince ', '989796177', 'Venta Celular Jhonny', 'jhonnycelulares@gmail.com', 'Maria Milagros Pina', 4),
-(5, 'Santa Anita', '997927404', 'Peru Importa', 'peruimporta@gmail.com', 'Percy Gonzalo Cabrera', 1);
+INSERT INTO `proveedor` (`ID_Prov`, `Direccion_Prov`, `Telefono_Prov`, `RazonSocial_Prov`, `Email_Prov`, `Nombre_Prov`, `ID_TProv`, `created_at`, `updated_at`) VALUES
+(1, 'Cercado de Lima ', '(01)3886906', 'Oscaona Ruiz', 'oscaonaruiz@gmail.com', 'Brigida Amador', 1, '2021-07-02 14:45:22', NULL),
+(2, 'Santiago de Surco', '948326040', 'Smartphones Peru SAC ', 'smarthperu@gmail.com', 'Carlos Enrique Cabrera', 2, '2021-07-02 14:45:22', NULL),
+(3, 'Av.La Molina', '981599076', 'Celulares Peru', 'celuperuoficial@gmail.com', 'Equipos para oficina y escolar', 3, '2021-07-02 14:45:22', NULL),
+(4, 'Lince ', '989796177', 'Venta Celular Jhonny', 'jhonnycelulares@gmail.com', 'Maria Milagros Pina', 4, '2021-07-02 14:45:22', NULL),
+(5, 'Santa Anita', '997927404', 'Peru Importa', 'peruimporta@gmail.com', 'Percy Gonzalo Cabrera', 1, '2021-07-02 14:45:22', NULL);
 
 -- --------------------------------------------------------
 
@@ -402,39 +461,58 @@ INSERT INTO `tipo_de_sucursal` (`ID_TSucur`, `Nombre_TSucur`) VALUES
 CREATE TABLE `tipo_producto` (
   `ID_TProd` int(11) NOT NULL,
   `Nombre_TProd` varchar(40) NOT NULL,
-  `Descripcion_TProd` varchar(500) DEFAULT NULL
+  `Descripcion_TProd` varchar(500) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `tipo_producto`
 --
 
-INSERT INTO `tipo_producto` (`ID_TProd`, `Nombre_TProd`, `Descripcion_TProd`) VALUES
-(1, 'Cable USB', 'V8-TIPOC/V3/HDMI/IPHONE/OTG'),
-(2, 'Mouse', 'Genericos Orginal'),
-(3, 'Teclados/ Pad Mouse', 'Accesorios para computadoras'),
-(4, 'Rack/ Soporte auto', 'Racks'),
-(5, 'Mini PC HTPC Intel Core i7', 'Windows 10 Pro, Enfriador de ordenador, oficina, escritorio, minipc, WIFI, Gráficos HD'),
-(6, 'Alfombrilla de ratón RGB MSI LED XXL', 'Antideslizante, de goma, para juegos, luz LED, para teclado, portátil, ordenador y PC'),
-(7, 'Alfombrilla de oficina anime', 'Para ordenador portátil, ratones Mousepad Muismat gran Borde de bloqueo'),
-(8, 'Teclado LED', 'Retroiluminado con LED para juegos, ratón ajustable, ordenador'),
-(9, 'Auriculares de alta calidad', 'Para videojuegos, música, negocios, PC/ordenador portátil/teléfono, oficina'),
-(10, 'Bluetooth para PC TV adaptador inalámbri', 'Inalámbrica Bluetooth V4.1 + receptor EDR de Audio adaptador AUX estéreo'),
-(11, 'Auriculares inalámbricos IPX6 ', 'Impermeables para hombre joven, cascos deportivos inteligentes con Bluetooth 2000, TWS, 5,0 mAh, alta fidelidad, música, Control de botones'),
-(12, 'Auricular inalámbrico con Bluetooth 5,1 ', 'Dispositivo de audio para teléfono inteligente, poco retraso, para videojuegos, música, HD, micrófono, manos libres, Control de botón, nueva actualización'),
-(13, 'ASUS ROM 5 Gaming Phone', 'ROG 5 5G 6,78 \"Snapdragon 888 Android11 6000mAh cargador rápida 65W ROG 5 Teléfono de juegos'),
-(14, 'ASUS ROM Phone 3', '12 GB de RAM 128/256/512 GB ROM OTA actualización Snapdragon865Plus 6000mAh Smartphone'),
-(15, 'ASUS Zenfone 5 ZE620KL', '4GB RAM 64GB ROM teléfono móvil de 6,2 pulgadas 19:9 FHD + Android 8,0 12MP + 8MP NFC 3300mAh'),
-(16, 'Lenovo YOGA - ordenador portátil ', '14 pulgadas, notebook con intel i5-1135G7/i5-11300H, 16 GB RAM, 2021 GB SSD, Pantalla táctil IPS, ultradelgado, 14s, novedad de 512'),
-(17, 'LLANO-Soporte de escritorio para ordenad', 'Base giratoria de 360 grados, altura ajustable para MacBook Air Pro, almohadilla de enfriamiento, soporte para ordenador portátil'),
-(18, 'Soporte de escritorio Vertical de alumin', 'Ahorra espacio para MacBook Air/Pro 16 13 15, iPad Pro 12,9, Chromebook y portátil de 11 a 17 pulgadas'),
-(19, 'Cargador múltiple LENTION', 'Lention USB HUB de USB 3,0 HDMI adaptador Dock para 2020-2016 MacBook Pro 13,3 USB-C tipo C 3,1 divisor 11 Puerto USB'),
-(20, 'DROBO', 'Creader-herramienta de diagnóstico Creader profesional CRP123 Creader VII, 100% Original, para lanzar el lector de código, Software, actualización en varios idiomas'),
-(21, 'Monitor portátil para PC', 'Para PC, móvil y Gaming con batería de 13,3 mAh, HDMI para Switch, PC, teléfonos Huawei, 10800'),
-(22, 'Xiaomi Redmi Note 10 ', 'Pro 6GB RAM 64GB / 128GB ROM teléfono móvil 108MP Cámara Snapdragon 732G 120Hz Pantalla AMOLED'),
-(23, 'Huawei Mate 20X5G', 'EVR-N29 Android Teléfono Kirin 980 40.0MP NFC IP53 7,2 pulgadas 2244X1080 8GB RAM 256GB ROM'),
-(24, 'Xiaomi-Smartphone Redmi K40 5G', '12GB y 256GB, Snapdragon 870, gran batería de 4520mAh, 48MP, 8MP, 5MP, Triple cámara trasera'),
-(25, 'Xiaomi Redmi Note 9', '3GB 64GB / 4GB 128GB MTK Helio G85 48MP Quad 5020mAh Cámara 6,53 \"DotDisplay teléfono móvil');
+INSERT INTO `tipo_producto` (`ID_TProd`, `Nombre_TProd`, `Descripcion_TProd`, `created_at`, `updated_at`) VALUES
+(1, 'Cable USB', 'V8-TIPOC/V3/HDMI/IPHONE/OTG', '2021-07-02 14:41:34', NULL),
+(2, 'Mouse', 'Genericos Orginal', '2021-07-02 14:41:34', NULL),
+(3, 'Teclados/ Pad Mouse', 'Accesorios para computadoras', '2021-07-02 14:41:34', NULL),
+(4, 'Rack/ Soporte auto', 'Racks', '2021-07-02 14:41:34', NULL),
+(5, 'Mini PC HTPC Intel Core i7', 'Windows 10 Pro, Enfriador de ordenador, oficina, escritorio, minipc, WIFI, Gráficos HD', '2021-07-02 14:41:34', NULL),
+(6, 'Alfombrilla de ratón RGB MSI LED XXL', 'Antideslizante, de goma, para juegos, luz LED, para teclado, portátil, ordenador y PC', '2021-07-02 14:41:34', NULL),
+(7, 'Alfombrilla de oficina anime', 'Para ordenador portátil, ratones Mousepad Muismat gran Borde de bloqueo', '2021-07-02 14:41:34', NULL),
+(8, 'Teclado LED', 'Retroiluminado con LED para juegos, ratón ajustable, ordenador', '2021-07-02 14:41:34', NULL),
+(9, 'Auriculares de alta calidad', 'Para videojuegos, música, negocios, PC/ordenador portátil/teléfono, oficina', '2021-07-02 14:41:34', NULL),
+(10, 'Bluetooth para PC TV adaptador inalámbri', 'Inalámbrica Bluetooth V4.1 + receptor EDR de Audio adaptador AUX estéreo', '2021-07-02 14:41:34', NULL),
+(11, 'Auriculares inalámbricos IPX6 ', 'Impermeables para hombre joven, cascos deportivos inteligentes con Bluetooth 2000, TWS, 5,0 mAh, alta fidelidad, música, Control de botones', '2021-07-02 14:41:34', NULL),
+(12, 'Auricular inalámbrico con Bluetooth 5,1 ', 'Dispositivo de audio para teléfono inteligente, poco retraso, para videojuegos, música, HD, micrófono, manos libres, Control de botón, nueva actualización', '2021-07-02 14:41:34', NULL),
+(13, 'ASUS ROM 5 Gaming Phone', 'ROG 5 5G 6,78 \"Snapdragon 888 Android11 6000mAh cargador rápida 65W ROG 5 Teléfono de juegos', '2021-07-02 14:41:34', NULL),
+(14, 'ASUS ROM Phone 3', '12 GB de RAM 128/256/512 GB ROM OTA actualización Snapdragon865Plus 6000mAh Smartphone', '2021-07-02 14:41:34', NULL),
+(15, 'ASUS Zenfone 5 ZE620KL', '4GB RAM 64GB ROM teléfono móvil de 6,2 pulgadas 19:9 FHD + Android 8,0 12MP + 8MP NFC 3300mAh', '2021-07-02 14:41:34', NULL),
+(16, 'Lenovo YOGA - ordenador portátil ', '14 pulgadas, notebook con intel i5-1135G7/i5-11300H, 16 GB RAM, 2021 GB SSD, Pantalla táctil IPS, ultradelgado, 14s, novedad de 512', '2021-07-02 14:41:34', NULL),
+(17, 'LLANO-Soporte de escritorio para ordenad', 'Base giratoria de 360 grados, altura ajustable para MacBook Air Pro, almohadilla de enfriamiento, soporte para ordenador portátil', '2021-07-02 14:41:34', NULL),
+(18, 'Soporte de escritorio Vertical de alumin', 'Ahorra espacio para MacBook Air/Pro 16 13 15, iPad Pro 12,9, Chromebook y portátil de 11 a 17 pulgadas', '2021-07-02 14:41:34', NULL),
+(19, 'Cargador múltiple LENTION', 'Lention USB HUB de USB 3,0 HDMI adaptador Dock para 2020-2016 MacBook Pro 13,3 USB-C tipo C 3,1 divisor 11 Puerto USB', '2021-07-02 14:41:34', NULL),
+(20, 'DROBO', 'Creader-herramienta de diagnóstico Creader profesional CRP123 Creader VII, 100% Original, para lanzar el lector de código, Software, actualización en varios idiomas', '2021-07-02 14:41:34', NULL),
+(21, 'Monitor portátil para PC', 'Para PC, móvil y Gaming con batería de 13,3 mAh, HDMI para Switch, PC, teléfonos Huawei, 10800', '2021-07-02 14:41:34', NULL),
+(22, 'Xiaomi Redmi Note 10 ', 'Pro 6GB RAM 64GB / 128GB ROM teléfono móvil 108MP Cámara Snapdragon 732G 120Hz Pantalla AMOLED', '2021-07-02 14:41:34', NULL),
+(23, 'Huawei Mate 20X5G', 'EVR-N29 Android Teléfono Kirin 980 40.0MP NFC IP53 7,2 pulgadas 2244X1080 8GB RAM 256GB ROM', '2021-07-02 14:41:34', NULL),
+(24, 'Xiaomi-Smartphone Redmi K40 5G', '12GB y 256GB, Snapdragon 870, gran batería de 4520mAh, 48MP, 8MP, 5MP, Triple cámara trasera', '2021-07-02 14:41:34', NULL),
+(25, 'Xiaomi Redmi Note 9', '3GB 64GB / 4GB 128GB MTK Helio G85 48MP Quad 5020mAh Cámara 6,53 \"DotDisplay teléfono móvil', '2021-07-02 14:41:34', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `users`
+--
+
+CREATE TABLE `users` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -444,18 +522,21 @@ INSERT INTO `tipo_producto` (`ID_TProd`, `Nombre_TProd`, `Descripcion_TProd`) VA
 
 CREATE TABLE `usuario` (
   `Usuario` varchar(50) NOT NULL,
-  `Contraseña` varchar(50) NOT NULL,
+  `Clave` varchar(50) NOT NULL,
   `ID_TEmpl` int(11) NOT NULL,
-  `ID_Usuario` int(11) NOT NULL
+  `ID_Usuario` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`Usuario`, `Contraseña`, `ID_TEmpl`, `ID_Usuario`) VALUES
-('admin', '21232f297a57a5a743894a0e4a801fc3', 1, 1),
-('almacen', '4e210009a1cfbf891ee1a8f75f441e2f', 2, 2);
+INSERT INTO `usuario` (`Usuario`, `Clave`, `ID_TEmpl`, `ID_Usuario`, `created_at`, `updated_at`) VALUES
+('admin', '21232f297a57a5a743894a0e4a801fc3', 1, 1, '2021-07-02 16:12:58', NULL),
+('almacen', '4e210009a1cfbf891ee1a8f75f441e2f', 2, 2, '2021-07-02 16:12:58', NULL),
+('admin@comunicacionglobal.com', 'admin123.', 1, 3, '2021-07-02 16:12:58', NULL);
 
 --
 -- Índices para tablas volcadas
@@ -495,6 +576,13 @@ ALTER TABLE `empleado`
   ADD KEY `ID_TEmpl` (`ID_TEmpl`,`ID_Sucur`,`ID_TDoc`,`ID_Distrito`);
 
 --
+-- Indices de la tabla `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
 -- Indices de la tabla `guia_de_remision`
 --
 ALTER TABLE `guia_de_remision`
@@ -508,11 +596,23 @@ ALTER TABLE `ingreso`
   ADD PRIMARY KEY (`ID_Ingres`);
 
 --
+-- Indices de la tabla `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `orden_compra`
 --
 ALTER TABLE `orden_compra`
   ADD PRIMARY KEY (`ID_Ordc`),
   ADD KEY `ID_Prov` (`ID_Prov`,`ID_Empl`);
+
+--
+-- Indices de la tabla `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD KEY `password_resets_email_index` (`email`);
 
 --
 -- Indices de la tabla `producto`
@@ -572,6 +672,13 @@ ALTER TABLE `tipo_producto`
   ADD PRIMARY KEY (`ID_TProd`);
 
 --
+-- Indices de la tabla `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_email_unique` (`email`);
+
+--
 -- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
@@ -583,16 +690,40 @@ ALTER TABLE `usuario`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `producto`
+--
+ALTER TABLE `producto`
+  MODIFY `ID_Prod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT de la tabla `tipo_de_empleado`
 --
 ALTER TABLE `tipo_de_empleado`
   MODIFY `ID_TEmpl` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT de la tabla `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

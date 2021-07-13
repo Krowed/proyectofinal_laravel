@@ -181,47 +181,4 @@ class ProductoController extends Controller
     }
 
 
-    public function agregardetalle(Request $request)
-    {
-        if(!$request->ajax())
-        {
-            echo json_encode(['estado'  => false, 'mensaje' => 'Algo falló, intente de nuevo']);
-            return;
-        }
-
-        $idproducto         = $request->input('idproducto');
-        $producto           = $request->input('producto');
-        $cantidad           = (int) $request->input('cantidad');
-        $precio_unitario    = (float) $request->input('precio_unitario');
-        $subtotal           = (float) $request->input('subtotal');
-        $detalles           = [];
-
-        $detalles[]         = 
-        [
-            'idproducto'        => $idproducto,
-            'producto'          => $producto,
-            'cantidad'          => $cantidad,
-            'precio_unitario'   => $precio_unitario,
-            'subtotal'          => $subtotal
-        ];
-            
-        $request->session()->put('detalles' , $detalles);
-
-        foreach($request->session()->get('detalles') as $index => $detalle)
-        {
-            if($idproducto == $detalle['idproducto'])
-            {
-                $detalle['cantidad']    = $detalle['cantidad'] + $cantidad;
-                $request->session()->put('detalles.' . $index , $detalle);
-                dd($request->session()->get('detalles'));
-            }
-        }
-
-
-        $request->session()->push('detalles' , $detalles);
-        dd($request->session()->get('detalles'));
-        return;
-    }   
-
-
 }

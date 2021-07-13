@@ -169,33 +169,32 @@
                     producto        = $('input[name="producto"]').val(),
                     cantidad        = parseInt($('input[name="cantidad"]').val()),
                     precio_unitario = parseFloat($('input[name="precio_unitario"]').val()),
-                    subtotal        = (cantidad * precio_unitario),
                     tbody           = $('#tbody_detalle').html(),
+                    subtotal        = (cantidad * precio_unitario),
                     fila            = ''; 
 
-                
-                $.ajax({
-                    url         : "{{ url('agregardetalle') }}",
-                    method      : 'POST',
-                    data        : {
-                        '_token'        : "{{ csrf_token() }}",
-                        idproducto      : idproducto,
-                        producto        : producto,
-                        cantidad        : cantidad,
-                        precio_unitario : precio_unitario,
-                        subtotal        : subtotal
-                    },
-                    success     : function(r){
-                        if(!r.estado)
-                        {
-                            alert(r.mensaje);
-                            return;
-                        }   
+                    if(tbody == '')
+                    {
+                        fila        += `<tr><td>${idproducto}</td><td>${producto}</td><td>${cantidad}</td><td>${precio_unitario}</td><td>${subtotal}</td><td><a href="" class="text-danger"><i class="fas fa-trash-alt"></i></a</td></tr>`;
+                    }
+
+                    else {
+                        $.each($('#tbody_detalle tr') , function(index, tr) {
+                            let id_td           = $(this).find('td').eq(0).html(),
+                                producto_table  = $(this).find('td').eq(1).html(),
+                                cantidad        = $(this).find('td').eq(2).html(),
+                                precio_u_table  = $(this).find('td').eq(3).html(),
+                                subtotal_table  = $(this).find('td').eq(4).html();
+                                
+                                return;
+                        });
 
 
-                    },
-                    dataType    : 'json'
-                });
+                    }
+
+                    fila         += `<tr><td>${idproducto}</td><td>${producto}</td><td>${cantidad}</td><td>${precio_unitario}</td><td>${subtotal}</td><td><a href="" class="text-danger"><i class="fas fa-trash-alt"></i></a</td></tr>`;
+
+                    $('#tbody_detalle').append(fila);                   
         }); 
     </script>
 @endsection
