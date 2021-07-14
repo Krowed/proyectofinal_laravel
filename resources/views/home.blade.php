@@ -4,7 +4,7 @@
 
 @section('content_tituloprincipal')
     <h1 class="m-0">Sistema de inventario Global Tec</h1>
-    <span class="text-muted">¡Bienvenido, usuario!</span>
+    <span class="text-muted">¡Bienvenido, {{ session('usuario')['email'] }}!</span>
 @endsection
 
 @section('content')
@@ -13,13 +13,15 @@
         <!-- small box -->
         <div class="small-box bg-info">
             <div class="inner">
-            <h3>150</h3>
+            <h3>
+                {{ $ingresos <= 0 ? 0 : $ingresos }}
+            </h3>
             <p>Entradas</p>
             </div>
             <div class="icon">
             <i class="ion ion-bag"></i>
             </div>
-            <a href="#" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="{{ route('ingresos') }}" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
         </div>
         </div>
         <!-- ./col -->
@@ -27,13 +29,15 @@
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-            <h3>53<sup style="font-size: 20px">%</sup></h3>
-            <p>Productos</p>
+            <h3>{{ $productos <= 0 ? 0 : $productos }}</h3>
+            <p>
+                Productos
+            </p>
             </div>
             <div class="icon">
             <i class="ion ion-stats-bars"></i>
             </div>
-            <a href="#" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="{{ route('productos') }}" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
         </div>
         </div>
         <!-- ./col -->
@@ -41,13 +45,17 @@
         <!-- small box -->
         <div class="small-box bg-warning">
             <div class="inner">
-            <h3>44</h3>
-            <p>Salidas</p>
+            <h3>
+                {{ $salidas <= 0 ? 0 : $salidas }}
+            </h3>
+            <p>
+                Salidas
+            </p>
             </div>
             <div class="icon">
             <i class="ion ion-person-add"></i>
             </div>
-            <a href="#" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="{{ route('salidas') }}" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
         </div>
         </div>
         <!-- ./col -->
@@ -55,13 +63,15 @@
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-            <h3>65</h3>
+            <h3>
+                {{ $ordenes <= 0 ? 0 : $ordenes }}
+            </h3>
             <p>Órdenes</p>
             </div>
             <div class="icon">
             <i class="ion ion-pie-graph"></i>
             </div>
-            <a href="#" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="{{ route('ordenes') }}" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
         </div>
         </div>
         <!-- ./col -->

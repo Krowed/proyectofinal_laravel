@@ -1,9 +1,9 @@
 @extends('layouts.plantilla')
 
-@section('title' , 'Home')
+@section('title' , 'Ingresos')
 
 @section('content_tituloprincipal')
-    <h1 class="m-0">Órdenes de compra</h1>
+    <h1 class="m-0">Ingresos</h1>
 @endsection
 
 @section('content')
@@ -12,17 +12,14 @@
             <div class="card">
                 <!-- /.card-header -->
                 <div class="card-body">
-                  <a href="{{ route('nuevaorden') }}" class="btn btn-primary mb-3"><i class="fas fa-file-alt"></i> Nuevo</a>
-                  <table id="table_ordenes" class="table table-bordered table-striped table-sm">
+                  <a href="{{ route('nuevoingreso') }}" class="btn btn-primary mb-3"><i class="fas fa-file-alt"></i> Nuevo</a>
+                  <table id="table_ingresos" class="table table-bordered table-striped table-sm">
                     <thead class="text-center">
                     <tr>
                       <th>ID</th>
                       <th>Num. serie</th>
-                      <th>Empleado</th>
-                      <th>Fecha emisión</th>
-                      <th>Fecha entrega</th>
-                      <th>Estado</th>
-                      <th>Total</th>
+                      <th>Num. orden</th>
+                      <th>Fecha ingreso</th>
                       <th width="8%"></th>
                     </tr>
                     </thead>
@@ -39,10 +36,11 @@
 @endsection
 @section('scripts')
     <script>
-        $(function () {
-          function cargar_datatables()
+        $(document).ready(function() {
+
+            function cargar_datatables()
           {
-            let datatable = $('#table_ordenes').DataTable({
+            let datatable = $('#table_ingresos').DataTable({
                 "language": {
                     "decimal": ",",
                     "thousands": ".",
@@ -98,23 +96,12 @@
                 ordering    :false,
                 autoWidth   :false,
                 "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-                "ajax":"{{ route('getOrdenes') }}",
+                "ajax":"{{ route('getIngresos') }}",
                 "columns":[
-                        { data          : "idorden", className : 'text-center' },
-                        { data          : "numero_serie", className : 'text-center' },
-                        { data          : "empleado", className : 'text-center' },
-                        { data          : "fecha_emision", className : 'text-center' },
-                        { data          : "fecha_entrega", className : 'text-center' },
-                        { data          : "estado", render : function(data) {
-                            if(data == 'PENDIENTE') 
-                            {
-                                return `<span class="text-warning font-weight-bold">${data}</span>`;
-                            }
-                            else {
-                               return `<span class="text-success font-weight-bold">${data}</span>`;
-                            }
-                        }, className : 'text-center'},
-                        { data          : "total", className : 'text-center' },
+                        { data          : "id_ingreso", className : 'text-center' },
+                        { data          : "serie", className : 'text-center' },
+                        { data          : "orden_compra", className : 'text-center' },
+                        { data          : "fecha_ingreso", className : 'text-center' },
                         {
                             data        : 'action',
                             orderable   : false, 
@@ -129,40 +116,8 @@
                 return datatable;
             }
 
-          cargar_datatables();
+            cargar_datatables();
 
-
-
-          $('body').on('click' , '.btn_actualizarorden' , function(e) {
-            e.preventDefault();
-            let check       = $(this).data('check'),
-                idorden     = $(this).data('idorden');
-
-                $.ajax({
-                    url         : "{{ route('actualizarorden') }}",
-                    method      : 'POST',
-                    data        : {
-                        "_token"    : "{{ csrf_token() }}",
-                        check       : check,
-                        idorden     : idorden
-                    },
-                    success     : function(r){
-                        if(r.estado)
-                        {
-                            Swal.fire({
-                                icon: 'success',
-                                text: r.mensaje,
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then( () => {
-                                cargar_datatables();
-                            });
-                        }
-                    },
-                    dataType    : 'json'
-                });
-                return;
-          });
         });
     </script>
 @endsection
