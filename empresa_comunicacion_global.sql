@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-07-2021 a las 20:27:30
--- Versión del servidor: 10.4.19-MariaDB
--- Versión de PHP: 7.3.28
+-- Tiempo de generación: 14-07-2021 a las 19:54:39
+-- Versión del servidor: 10.4.20-MariaDB
+-- Versión de PHP: 7.3.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,6 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `detalle_compra` (
+  `Producto` varchar(100) DEFAULT NULL,
   `Precio_Unitario` decimal(12,2) NOT NULL,
   `Cantidad` int(11) NOT NULL,
   `Total` decimal(12,2) NOT NULL,
@@ -39,11 +40,13 @@ CREATE TABLE `detalle_compra` (
 -- Volcado de datos para la tabla `detalle_compra`
 --
 
-INSERT INTO `detalle_compra` (`Precio_Unitario`, `Cantidad`, `Total`, `ID_Ordc`, `ID_Prod`) VALUES
-('11.00', 5, '55.00', 1, 4),
-('16.00', 4, '54.00', 3, 1),
-('35.00', 2, '70.00', 3, 3),
-('10.00', 2, '20.00', 5, 3);
+INSERT INTO `detalle_compra` (`Producto`, `Precio_Unitario`, `Cantidad`, `Total`, `ID_Ordc`, `ID_Prod`) VALUES
+('TABLET', '70.00', 1, '70.00', 13, 4),
+('CELULAR', '980.00', 2, '1960.00', 13, 5),
+('TABLET', '70.00', 1, '70.00', 14, 4),
+('LYG/MOVISCON', '3.00', 1, '3.00', 14, 2),
+('LYG/MOVISCON', '3.00', 1, '3.00', 15, 2),
+('V8 OTROS', '5.00', 1, '5.00', 16, 1);
 
 -- --------------------------------------------------------
 
@@ -54,7 +57,6 @@ INSERT INTO `detalle_compra` (`Precio_Unitario`, `Cantidad`, `Total`, `ID_Ordc`,
 CREATE TABLE `detalle_ingreso` (
   `ID_Prod` int(11) NOT NULL,
   `Cantidad` int(11) NOT NULL,
-  `Total` decimal(12,2) NOT NULL,
   `ID_Ingres` int(11) NOT NULL,
   `ID_Ordc` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -63,11 +65,8 @@ CREATE TABLE `detalle_ingreso` (
 -- Volcado de datos para la tabla `detalle_ingreso`
 --
 
-INSERT INTO `detalle_ingreso` (`ID_Prod`, `Cantidad`, `Total`, `ID_Ingres`, `ID_Ordc`) VALUES
-(1, 13, '5000.00', 1, 3),
-(2, 10, '50.00', 2, 4),
-(3, 1, '10.00', 5, 6),
-(4, 100, '680.00', 3, 4);
+INSERT INTO `detalle_ingreso` (`ID_Prod`, `Cantidad`, `ID_Ingres`, `ID_Ordc`) VALUES
+(4, 1, 7, 14);
 
 -- --------------------------------------------------------
 
@@ -86,10 +85,10 @@ CREATE TABLE `detalle_salida` (
 --
 
 INSERT INTO `detalle_salida` (`ID_Prod`, `ID_Salid`, `Cantidad`) VALUES
-(1, 1, 13),
-(4, 6, 10),
-(2, 3, 18),
-(3, 4, 23);
+(4, 13, 1),
+(3, 14, 1),
+(2, 15, 2),
+(3, 15, 1);
 
 -- --------------------------------------------------------
 
@@ -183,19 +182,19 @@ CREATE TABLE `guia_de_remision` (
 CREATE TABLE `ingreso` (
   `ID_Ingres` int(11) NOT NULL,
   `Serie` varchar(20) NOT NULL,
-  `Fecha` date NOT NULL
+  `Fecha` date NOT NULL,
+  `Reporte_ingreso` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `ingreso`
 --
 
-INSERT INTO `ingreso` (`ID_Ingres`, `Serie`, `Fecha`) VALUES
-(1, '001001910', '2021-09-22'),
-(2, '001001911', '2021-12-24'),
-(3, '001001912', '2021-12-07'),
-(4, '4234231912', '2021-11-17'),
-(5, '846534563', '2021-10-13');
+INSERT INTO `ingreso` (`ID_Ingres`, `Serie`, `Fecha`, `Reporte_ingreso`, `created_at`, `updated_at`) VALUES
+(6, '1', '2021-10-07', '', NULL, NULL),
+(7, '1', '2021-10-07', '2021-07-14-17-23-39.pdf', NULL, '2021-07-14 22:23:39');
 
 -- --------------------------------------------------------
 
@@ -226,22 +225,25 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 
 CREATE TABLE `orden_compra` (
   `ID_Ordc` int(11) NOT NULL,
+  `Numero_orden_compra` int(11) DEFAULT NULL,
   `FechaOrden_Ordc` date NOT NULL,
   `FechaEntrega_Ordc` date NOT NULL,
-  `ID_Prov` int(11) NOT NULL,
-  `ID_Empl` int(11) NOT NULL
+  `Estado` int(11) NOT NULL,
+  `ID_Empl` int(11) NOT NULL,
+  `Reporte_orden` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `orden_compra`
 --
 
-INSERT INTO `orden_compra` (`ID_Ordc`, `FechaOrden_Ordc`, `FechaEntrega_Ordc`, `ID_Prov`, `ID_Empl`) VALUES
-(1, '2021-06-15', '2021-06-24', 5, 1),
-(3, '2021-02-17', '2021-06-19', 1, 3),
-(4, '2021-07-23', '2021-07-24', 3, 1),
-(5, '2021-12-16', '2021-12-24', 1, 3),
-(6, '2021-10-21', '2021-10-29', 3, 2);
+INSERT INTO `orden_compra` (`ID_Ordc`, `Numero_orden_compra`, `FechaOrden_Ordc`, `FechaEntrega_Ordc`, `Estado`, `ID_Empl`, `Reporte_orden`, `created_at`, `updated_at`) VALUES
+(13, 1, '1970-01-01', '1970-01-01', 0, 3, '2021-07-14-13-45-14.pdf', NULL, '2021-07-14 20:01:45'),
+(14, 2, '1970-01-01', '1970-01-01', 0, 3, '2021-07-14-14-05-08.pdf', NULL, '2021-07-14 19:05:08'),
+(15, 3, '1970-01-01', '1970-01-01', 0, 3, '2021-07-14-14-11-10.pdf', NULL, '2021-07-14 19:11:10'),
+(16, 4, '2021-05-07', '2021-07-08', 0, 3, '2021-07-14-14-28-04.pdf', NULL, '2021-07-14 19:28:04');
 
 -- --------------------------------------------------------
 
@@ -281,15 +283,11 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`ID_Prod`, `Nombre_Prod`, `Codigo`, `PrecioVent_Prod`, `PrecioComp_Prod`, `StockActual_Prod`, `StockInicial_Prod`, `ID_Prov`, `ID_TProd`, `estado`, `created_at`, `updated_at`) VALUES
-(1, 'V8 OTROS', '22', '5.00', '5.00', 155, 80, 1, 22, 1, NULL, '2021-07-05 18:31:30'),
+(1, 'V8 OTROS', '22', '5.00', '5.00', 155, 80, 1, 22, 1, NULL, '2021-07-12 03:01:26'),
 (2, 'LYG/MOVISCON', '2', '3.00', '4.00', 59, 104, 3, 2, 1, NULL, NULL),
-(3, 'IPHONE GENERICO', '3', '400.00', '200.00', 2, 1, 2, 3, 1, NULL, '2021-07-05 18:26:44'),
+(3, 'IPHONE GENERICO', '3', '400.00', '200.00', 1, 2, 2, 3, 1, NULL, '2021-07-12 03:01:19'),
 (4, 'TABLET', '4', '70.00', '60.00', 15, 8, 3, 10, 1, NULL, NULL),
-(5, 'CELULAR', '17', '980.00', '900.00', 234, 123, 1, 17, 1, NULL, '2021-07-05 18:02:13'),
-(6, 'Prueba', '6', '15.00', '13.00', 50, 80, 3, 6, 1, NULL, NULL),
-(7, 'productoprueba', '7', '20.00', '15.00', 50, 70, 3, 14, 1, NULL, NULL),
-(8, 'Producto03', '8', '15.00', '10.00', 50, 70, 1, 2, 1, NULL, NULL),
-(9, 'Prueba09', '7', '20.00', '15.00', 50, 80, 1, 7, 1, NULL, '2021-07-05 18:32:58');
+(5, 'CELULAR', '17', '980.00', '900.00', 123, 234, 1, 17, 1, NULL, '2021-07-12 03:01:13');
 
 -- --------------------------------------------------------
 
@@ -329,24 +327,21 @@ INSERT INTO `proveedor` (`ID_Prov`, `Direccion_Prov`, `Telefono_Prov`, `RazonSoc
 CREATE TABLE `salida` (
   `ID_Salid` int(11) NOT NULL,
   `Fecha` date NOT NULL,
-  `Serie` varchar(20) NOT NULL
+  `Serie` varchar(20) NOT NULL,
+  `Usuario` int(11) DEFAULT NULL,
+  `Reporte_salida` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `salida`
 --
 
-INSERT INTO `salida` (`ID_Salid`, `Fecha`, `Serie`) VALUES
-(1, '2019-09-28', '001'),
-(2, '2019-10-05', '002'),
-(3, '2021-10-11', '003'),
-(4, '2021-06-24', '004'),
-(5, '2021-09-29', '005'),
-(6, '2021-10-22', '006'),
-(7, '2021-11-17', '007'),
-(8, '2021-12-14', '008'),
-(9, '2021-12-10', '009'),
-(10, '2021-12-21', '0010');
+INSERT INTO `salida` (`ID_Salid`, `Fecha`, `Serie`, `Usuario`, `Reporte_salida`, `created_at`, `updated_at`) VALUES
+(13, '1970-01-01', '1', 3, '2021-07-14-15-35-17.pdf', NULL, '2021-07-14 20:35:17'),
+(14, '1970-01-01', '2', 3, '2021-07-14-15-41-51.pdf', NULL, '2021-07-14 20:41:51'),
+(15, '2021-12-07', '3', 3, '2021-07-14-15-51-56.pdf', NULL, '2021-07-14 20:51:56');
 
 -- --------------------------------------------------------
 
@@ -534,8 +529,6 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`Usuario`, `Clave`, `ID_TEmpl`, `ID_Usuario`, `created_at`, `updated_at`) VALUES
-('admin', '21232f297a57a5a743894a0e4a801fc3', 1, 1, '2021-07-02 16:12:58', NULL),
-('almacen', '4e210009a1cfbf891ee1a8f75f441e2f', 2, 2, '2021-07-02 16:12:58', NULL),
 ('admin@comunicacionglobal.com', 'admin123.', 1, 3, '2021-07-02 16:12:58', NULL);
 
 --
@@ -606,7 +599,7 @@ ALTER TABLE `migrations`
 --
 ALTER TABLE `orden_compra`
   ADD PRIMARY KEY (`ID_Ordc`),
-  ADD KEY `ID_Prov` (`ID_Prov`,`ID_Empl`);
+  ADD KEY `ID_Prov` (`Estado`,`ID_Empl`);
 
 --
 -- Indices de la tabla `password_resets`
@@ -696,16 +689,34 @@ ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `ingreso`
+--
+ALTER TABLE `ingreso`
+  MODIFY `ID_Ingres` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT de la tabla `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT de la tabla `orden_compra`
+--
+ALTER TABLE `orden_compra`
+  MODIFY `ID_Ordc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
   MODIFY `ID_Prod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT de la tabla `salida`
+--
+ALTER TABLE `salida`
+  MODIFY `ID_Salid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_de_empleado`

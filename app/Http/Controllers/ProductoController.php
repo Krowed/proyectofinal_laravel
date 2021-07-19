@@ -104,7 +104,8 @@ class ProductoController extends Controller
             'PrecioVent_Prod'   => $precio_venta,
             'PrecioComp_Prod'   => $precio_compra,
             'StockInicial_Prod' => $stock_actual,
-            'StockActual_Prod'  => $stock_minimo
+            'StockActual_Prod'  => $stock_minimo,
+            'Fecha_registro'    => date('Y-m-d')
         ];
 
         ProductoModel::insert($data_producto);

@@ -3,8 +3,12 @@
 @section('title' , 'Home')
 
 @section('content_tituloprincipal')
-    <h1 class="m-0">Sistema de inventario Global Tec</h1>
-    <span class="text-muted">¡Bienvenido, {{ session('usuario')['email'] }}!</span>
+    <h1 class="m-0">
+        Sistema de inventario Global Tec
+    </h1>
+    <span class="text-muted">
+        ¡Bienvenido, {{ session('usuario')['email'] }}!
+    </span>
 @endsection
 
 @section('content')
